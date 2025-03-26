@@ -32,13 +32,12 @@ jobs:
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-cov
+        pip install flake8 pytest pytest-django pytest-cov
         pip install -r requirements.txt
 
     - name: Apply Migrations
       run: |
         python manage.py migrate --noinput
-        python manage.py flush --noinput
 
     - name: Lint
       run: |
@@ -56,5 +55,4 @@ jobs:
 
     - name: Run unit tests with pytest
       run: |
-        export DJANGO_SETTINGS_MODULE=todolist.settings
         pytest -v --cov=. --cov-report=term-missing --cov-report=json
