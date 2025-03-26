@@ -37,10 +37,12 @@ jobs:
 
     - name: Run tests
       run: |
+        cd ./api
         pytest
 
     - name: Generate coverage report
       run: |
+        cd ./api
         coverage run -m pytest
         coverage report
 
