@@ -1,5 +1,6 @@
 name: todolist-deployment
 run-name: ${{ github.sha }}
+
 on:
   push:
     branches:
@@ -11,7 +12,7 @@ on:
 
 env:
   PYTHON_VERSION: 3.8
-
+  DJANGO_SETTINGS_MODULE: todolist.settings
 
 jobs:
   python-ci:
@@ -33,15 +34,27 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest pytest-cov
         pip install -r requirements.txt
-        python manage.py migrate
+
+    - name: Apply Migrations
+      run: |
+        python manage.py migrate --noinput
+        python manage.py flush --noinput
+
     - name: Lint
       run: |
         cd ../
         flake8 . --show-source --statistics
+
     - name: Check Complexity
       run: |
         cd ../
         flake8 . --statistics --max-complexity=10 --exit-zero
+
+    - name: Run Django Tests
+      run: |
+        python manage.py test
+
     - name: Run unit tests with pytest
       run: |
+        export DJANGO_SETTINGS_MODULE=todolist.settings
         pytest -v --cov=. --cov-report=term-missing --cov-report=json
