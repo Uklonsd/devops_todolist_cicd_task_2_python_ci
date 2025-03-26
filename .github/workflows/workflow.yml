@@ -38,7 +38,7 @@ jobs:
     - name: Run tests
       run: |
         cd ./api
-        pytest
+        pytest 
 
     - name: Generate coverage report
       run: |
@@ -48,6 +48,7 @@ jobs:
 
     - name: Display coverage report
       run: |
+        cd ./api
         coverage report -m
 
     - name: Check code style
